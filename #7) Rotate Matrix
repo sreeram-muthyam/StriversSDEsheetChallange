@@ -1,0 +1,65 @@
+// https://leetcode.com/problems/rotate-image/
+
+class Solution {
+public:
+    
+    void rotate(vector<vector<int>>& matrix) 
+    {
+        
+        int n = matrix.size();
+        int m = matrix[0].size();
+        for(int i=0; i<n; i++)
+            for(int j=0; j<i; j++)
+                swap(matrix[i][j],matrix[j][i]);
+        
+        for(int i=0; i<n; i++) reverse(matrix[i].begin(),matrix[i].end());
+        
+    }
+};
+
+
+//https://www.codingninjas.com/codestudio/problems/981260?topList=striver-sde-sheet-problems&utm_source=striver&utm_medium=website&leftPanelTab=1
+#include <bits/stdc++.h> 
+
+void perform(vector<vector<int>> &arr, int i, int j,int k, int n, int m)
+{
+    int ele = arr[i][j];
+//         cout<<i<<" | "<<j<<" : "<<n<<" | "<<m<<endl;
+    for(int x=i+1; x<=n-1-i; x++)
+    {
+        arr[x-1][j]=arr[x][j];
+//         cout<<x<<" @ "<<j<<endl;
+    } 
+    for(int y=j+1; y<=m-1-j; y++)
+    {
+        arr[n-1-i][y-1]=arr[n-1-i][y];
+//         cout<<n-1-i<<" & "<<y<<endl;
+    }
+    for(int x=n-2-i; x>=i; x--)
+    {
+        arr[x+1][m-1-j]=arr[x][m-1-j];
+//         cout<<x<<" * "<<m-1-j<<endl;
+    }
+    for(int y=m-2-j; y>=j; y--)
+    {
+        arr[i][y+1]=arr[i][y];
+//         cout<<i<<" # "<<y<<endl;
+    }
+    arr[i][j+1]=ele;
+}
+
+void rotateMatrix(vector<vector<int>> &matrix, int n, int m)
+{
+    // Write your code here
+        
+    int rings = min(n,m)/2;
+    int i=0,j=0,k=1;
+    while(k<=rings)
+    {
+        perform(matrix,i,j,k,n,m);
+        k++;
+        i++;
+        j++;
+    }
+
+}
