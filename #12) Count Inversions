@@ -1,0 +1,65 @@
+// https://www.codingninjas.com/codestudio/problems/count-inversions_615?leftPanelTab=1
+
+#include <bits/stdc++.h> 
+
+long long int merge(long long arr[], long long i, long long m, long long j)
+    {
+        long long n1=m-i+1;
+        long long n2=j-m;
+        long long int inv = 0;
+        long long a[n1];
+        long long b[n2];
+        for(int k=0; k<n1; k++) a[k]=arr[i+k];
+        for(int k=0; k<n2; k++) b[k]=arr[m+1+k];
+        long long k=i;
+        long long l=0;
+        long long r=0;
+        while(l<n1 && r<n2)
+        {
+            if(a[l]<=b[r])
+            {
+                arr[k]=a[l];
+                l++;
+                k++;
+            }
+            else
+            {
+                arr[k]=b[r];
+                inv += (n1-l);
+                r++;
+                k++;
+            }
+        }
+        while(l<n1)
+        {
+            arr[k]=a[l];
+            l++;
+            k++;
+        }
+        while(r<n2)
+        {
+            arr[k]=b[r];
+            r++;
+            k++;
+        }
+        return inv;
+    }
+    
+    long long int mergesort(long long arr[], long long i, long long j)
+    {
+        long long int inv=0;
+        if(i<j)
+        {
+            int m = (i+j)/2;
+            inv += mergesort(arr,i,m);
+            inv += mergesort(arr,m+1,j);
+            inv += merge(arr,i,m,j);
+        }
+        return inv;
+    }
+
+
+long long getInversions(long long *arr, int n){
+    // Write your code here.
+    return mergesort(arr,0,n-1);
+}
