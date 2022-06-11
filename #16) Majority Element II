@@ -1,0 +1,20 @@
+//.  https://leetcode.com/problems/majority-element-ii/
+
+class Solution {
+public:
+    vector<int> majorityElement(vector<int>& nums) 
+    {
+        vector<int> res;
+        int n = nums.size();
+        sort(nums.begin(),nums.end());
+        int i=0;
+        while(i<n)
+        {
+            int ind = upper_bound(nums.begin(),nums.end(),nums[i])-nums.begin();
+            int freq = ind-i;
+            if(freq>floor(n/3)) res.push_back(nums[i]);
+            i=ind;
+        }
+        return res;
+    }
+};
