@@ -1,0 +1,18 @@
+//  https://www.interviewbit.com/problems/subarray-with-given-xor/
+
+int Solution::solve(vector<int> &A, int B) 
+{
+    unordered_map<int,int> um;
+    int xo = 0;
+    um[xo]=1;
+    int n = A.size();
+    int res=0;
+    for(int i=0; i<n; i++)
+    {
+        xo ^= A[i];
+        int req = xo^B;
+        if(um.find(req)!=um.end()) res += um[req];
+        um[xo]++;
+    }
+    return res;
+}
