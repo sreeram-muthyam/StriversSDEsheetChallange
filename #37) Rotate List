@@ -1,0 +1,45 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+//  https://leetcode.com/problems/rotate-list/submissions/
+
+
+class Solution {
+public:
+    
+    int get_length(ListNode* head)
+    {
+        int l = 0;
+        while(head) {l++; head=head->next;}
+        return l;
+    }
+    
+    ListNode* rotateRight(ListNode* head, int k) 
+    {
+        if(head==NULL || head->next==NULL || k==0) return head;
+        ListNode* prev=NULL;
+        ListNode* curr=head;
+        int length = get_length(head);
+        k = k%length;
+        if(k==0) return head;
+        k = length-k;
+        while(k--)
+        {
+            prev=curr;
+            curr=curr->next;
+        }
+        prev->next = NULL;
+        prev = curr;
+        while(curr && curr->next) curr=curr->next;
+        curr->next = head;
+        return prev;
+    }
+};
