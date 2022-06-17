@@ -1,0 +1,56 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+
+//  https://leetcode.com/problems/copy-list-with-random-pointer/
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) 
+    {
+        if(head==NULL) return head;
+        Node* curr=head;
+        while(curr)
+        {
+            Node* temp = new Node(curr->val);
+            temp->next=curr->next;
+            curr->next=temp;
+            curr=temp->next;
+        }
+        curr=head;
+        while(curr)
+        {
+            Node* temp = curr->next;
+            if(curr->random)
+            {
+                temp->random = curr->random->next;
+            }
+            curr=temp->next;
+        }
+        curr=head;
+        Node* newhead = curr->next;
+        while(curr)
+        {
+            Node* temp = curr->next;
+            curr->next=temp->next;
+            if(curr->next)
+            {
+                temp->next=curr->next->next;
+            }
+            curr=curr->next;
+        }
+        return newhead;
+    }
+};
