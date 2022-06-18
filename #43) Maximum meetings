@@ -1,0 +1,33 @@
+
+#include<bits/stdc++.h>
+
+//    https://www.codingninjas.com/codestudio/problems/1062658?topList=striver-sde-sheet-problems&utm_source=striver&utm_medium=website&leftPanelTab=1
+
+static bool cmp(vector<int> &a, vector<int> &b)
+{
+    if(a[0]==b[0]) return a[2]<b[2];
+    return a[0]<b[0];
+}
+
+vector<int> maximumMeetings(vector<int> &start, vector<int> &end) {
+    // Write your code here.
+    vector<int> res;
+     vector<vector<int>> v;
+    int n = start.size();
+        for(int i=0; i<n; i++)
+        {
+            v.push_back({end[i],start[i],i+1});
+        }
+        sort(v.begin(),v.end(),cmp);
+        int en = v[0][0];
+    res.push_back(v[0][2]);
+        for(int i=1; i<n; i++)
+        {
+            if(v[i][1]>en)
+            {
+                res.push_back(v[i][2]);
+                en=v[i][0];
+            }
+        }
+        return res;
+}
