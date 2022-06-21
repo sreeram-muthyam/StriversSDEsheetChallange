@@ -1,0 +1,60 @@
+//  https://leetcode.com/problems/n-queens/
+
+class Solution {
+public:
+    
+    vector<vector<string>> res;
+    
+    bool chk(vector<string> &arr, int i, int j, int n)
+    {
+        int x=i, y=j;
+        while(x>=0)
+        {
+            if(arr[x][y]=='Q') return false;
+            x--;
+        }
+        x=i;
+        while(x>=0 && y>=0)
+        {
+            if(arr[x][y]=='Q') return false;
+            x--;
+            y--;
+        }
+        x=i, y=j;
+        while(x>=0 && y<n)
+        {
+            if(arr[x][y]=='Q') return false;
+            x--;
+            y++;
+        }
+        return true;
+    }
+    
+    void helper(vector<string> &arr, int i, int n)
+    {
+        if(i==n)
+        {
+            res.push_back(arr);
+            return;
+        }
+        for(int j=0; j<n; j++)
+        {
+            if(chk(arr,i,j,n))
+            {
+                arr[i][j]='Q';
+                helper(arr,i+1,n);
+            }
+            arr[i][j]='.';
+        }
+    }
+    
+    vector<vector<string>> solveNQueens(int n) 
+    {
+        vector<string> arr;
+        string str="";
+        for(int i=0; i<n; i++) str+=".";
+        for(int i=0; i<n; i++) arr.push_back(str);
+        helper(arr,0,n);
+        return res;
+    }
+};
