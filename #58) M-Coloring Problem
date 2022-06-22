@@ -1,0 +1,32 @@
+//  https://practice.geeksforgeeks.org/problems/m-coloring-problem-1587115620/1#
+
+bool check(int j, int i, int V, bool graph[101][101], vector<int> &color)
+{
+    for(int k=0; k<V; k++)
+    {
+        if(graph[i][k] && color[k]==j) return false;
+    }
+    return true;
+}
+
+bool helper(bool graph[101][101], int m, int V, int i, vector<int> &color)
+{
+    if(i==V) return true;
+    for(int j=0; j<m; j++)
+    {
+        if(check(j,i,V,graph,color))
+        {
+            color[i]=j;
+            if(helper(graph,m,V,i+1,color)) return true;
+            color[i]=-1;
+        }
+    }
+    return false;
+}
+
+bool graphColoring(bool graph[101][101], int m, int V)
+{
+    // your code here
+    vector<int> color(V,-1);
+    return helper(graph,m,V,0,color);
+}
