@@ -1,0 +1,30 @@
+//  https://www.interviewbit.com/problems/matrix-median/
+
+int Solution::findMedian(vector<vector<int> > &A) 
+{
+    
+    int n = A.size();
+    int m = A[0].size();
+    
+    int mini = A[0][0];
+    int maxi = A[0][m-1];
+    
+    for(int i=1; i<n; i++)
+    {
+        mini = min(mini,A[i][0]);
+        maxi = max(maxi,A[i][m-1]);
+    }
+    
+    int req = (n*m+1)/2;
+    
+    while(mini<maxi)
+    {
+        int mid = (maxi+mini)/2;
+        int pos = 0;
+        for(int i=0; i<n; i++)
+            pos = pos + upper_bound(A[i].begin(),A[i].end(),mid)-A[i].begin();
+        if(pos<req) mini=mid+1;
+        else maxi = mid;
+    }
+    return maxi;
+}
