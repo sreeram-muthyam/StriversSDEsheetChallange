@@ -1,0 +1,56 @@
+/*
+        Time Complexity: O(N * log(max))
+        Space Complexity: O(1),
+   
+        where N is the total number of rooms and max is the maximum possible position for any room.
+
+*/
+
+//    https://www.codingninjas.com/codestudio/problems/chess-tournament_981299?topList=striver-sde-sheet-problems&utm_source=striver&utm_medium=website
+
+int chessTournament( vector<int> &positions, int n , int c) 
+{
+    // Sorting all positions of empty rooms.
+    sort(positions.begin(),positions.end());   
+    
+    // l is the least possible answer and r is the max possible answer.
+    int ans=0 , l=1 , r = positions[n-1]; 
+    
+    // We will find answer by using binary search.
+    while(l<=r)
+    { 
+        // Lets check wether the allocation is possible for mid.
+        int mid=(l+r)/2; 
+        
+        // previous_room stores the previous occupied empty room.
+        int count=1 , previousRoom=positions[0]; 
+        
+        for(int i = 1 ; i < n ; i++) 
+        {
+            // If the diffrence between current and previous room >= mid we will allocate it.
+            if(positions[i]-previousRoom >= mid) 
+            {  
+                count++;
+                previousRoom=positions[i];
+            }
+        }
+
+        // Compressing length to right half if allocation is possible.
+        if(count >= c)
+        { 
+            ans=mid;
+            l=mid+1;
+        }
+
+        // Compressing length to left half if allocation is not possible.
+        else 
+        {  
+            r=mid-1;
+        }
+    }
+ 
+    return ans;
+}
+
+
+
