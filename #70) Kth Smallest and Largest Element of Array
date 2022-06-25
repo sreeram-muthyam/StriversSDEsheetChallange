@@ -1,0 +1,22 @@
+//    https://www.codingninjas.com/codestudio/problems/kth-smallest-and-largest-element-of-array_1115488?topList=striver-sde-sheet-problems&utm_source=striver&utm_medium=website&leftPanelTab=0
+
+#include <bits/stdc++.h>
+
+vector<int> kthSmallLarge(vector<int> &nums, int n, int k)
+{
+	// Write your code here.
+    vector<int> res;
+    priority_queue<int> pq1;
+    priority_queue<int, vector<int>, greater<int>> pq2;
+    for (int num : nums) {
+        pq1.push(num);
+        pq2.push(num);
+        if (pq1.size() > k) {
+            pq2.pop();
+            pq1.pop();
+        }
+    }
+    res.push_back(pq1.top());
+    res.push_back(pq2.top());
+    return res;
+}
