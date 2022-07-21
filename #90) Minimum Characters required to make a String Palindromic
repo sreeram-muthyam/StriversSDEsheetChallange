@@ -1,0 +1,66 @@
+// int res;
+
+// void helper(string &str, int l, int r)
+// {
+//     int n = str.size();
+//     while(l>=0 && r<n)
+//     {
+//         if(str[l]==str[r])
+//         {
+//             l--;
+//             r++;
+//         }
+//         else return;
+//     }
+//     if(l==-1) res = min(res,n-r);
+// }
+
+//  "AACECAAAA"
+
+int Solution::solve(string str) 
+{
+    // int n = str.size();
+    // res = n;
+    // for(int i=0; i<n; i++)
+    // {
+    //     helper(str,i,i);
+    //     helper(str,i,i+1);
+    // }
+    // return res;
+    
+    string s = str;
+    reverse(s.begin(),s.end());
+    str = str + s;
+    int n = str.size();
+    vector<int> lps(n,0);
+    
+    // BUILD LPS ARRAY
+    
+    int len = 0;
+    int i = 1;
+    lps[0]=0;
+    while(i<n)
+    {
+        if(str[i]==str[len])
+        {
+            lps[i]=len+1;
+            len += 1;
+            i += 1;
+        }
+        else
+        {
+            if(len!=0)
+                len = lps[len-1];
+            else
+            {
+                lps[i]=0;
+                i++;
+            }
+        }
+    }
+    //cout<<lps[str.size()-1]<<endl;
+    int res = n/2-lps[str.size()-1];
+    if(res<0) return 0;
+    return res;
+    
+}
