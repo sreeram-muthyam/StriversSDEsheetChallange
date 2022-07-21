@@ -1,0 +1,44 @@
+//  https://www.youtube.com/watch?v=mcYxvSmNDlY
+
+class Solution {
+public:
+    
+    vector<int> z_func(string &s)
+    {
+        int n = s.size();
+        vector<int> z(n,0);
+        int l=0, r=0;
+        for(int i=1; i<n; i++)
+        {
+            // index is in the interval L .... R
+            if(i<=r)
+            {
+                z[i] = min(r-i+1,z[i-l]);
+            }
+            // Brute Force
+            while(i+z[i]<n && (s[z[i]]==s[i+z[i]]))
+            {
+                z[i]++;
+            }
+            // L and R updation
+            if(i+z[i]-1>=r)
+            {
+                l=i;
+                r=i+z[i]-1;
+            }
+        }
+        return z;
+    }
+    
+    int strStr(string str, string pat) 
+    {
+        string s = pat+"$"+str;
+        int n = s.size();
+        vector<int> z(n,0);
+        z = z_func(s);
+        for(int i=0; i<n; i++)
+            if(z[i]==pat.size())
+                return i-pat.size()-1;
+        return -1;
+    }
+};
