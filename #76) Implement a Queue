@@ -1,0 +1,54 @@
+https://www.codingninjas.com/codestudio/problems/2099908?topList=striver-sde-sheet-problems&utm_source=striver&utm_medium=website&leftPanelTab=1
+
+
+class Queue {
+public:
+    
+    int arr[10000];
+    int left;
+    int right;
+    
+    Queue() {
+        // Implement the Constructor
+        left=0;
+        right=0;
+    }
+
+    /*----------------- Public Functions of Queue -----------------*/
+
+    bool isEmpty() {
+        // Implement the isEmpty() function
+        return left==right;
+        left=0;
+        right=0;
+    }
+
+    void enqueue(int data) {
+        // Implement the enqueue() function
+        arr[right]=data;
+        right++;
+    }
+
+    int dequeue() {
+        // Implement the dequeue() function
+        if(left==right)
+        {
+            left=0;
+            right=0;
+            return -1;
+        }
+        left++;
+        return arr[left-1];
+    }
+
+    int front() {
+        // Implement the front() function
+        if(left==right)
+        {
+            left=0;
+            right=0;
+            return -1;
+        }
+        return arr[left];
+    }
+};
