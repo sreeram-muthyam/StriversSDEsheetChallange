@@ -12,25 +12,36 @@
 class Solution {
 public:
     
-    int idx=0;
+//     int idx=0;
     
-    TreeNode* helper(vector<int> &pre, vector<int> &in, int i, int j)
-    {
-        if(idx==in.size() || i>j) return NULL;
-        TreeNode* n = new TreeNode(pre[idx]);
-        int k;
-        for(int l=i; l<=j; l++) if(in[l]==pre[idx]) k=l;
-        idx++;
-        n->left = helper(pre,in,i,k-1);
-        n->right = helper(pre,in,k+1,j);
+//     TreeNode* helper(vector<int> &pre, vector<int> &in, int i, int j)
+//     {
+//         if(idx==in.size() || i>j) return NULL;
+//         TreeNode* n = new TreeNode(pre[idx]);
+//         int k;
+//         for(int l=i; l<=j; l++) if(in[l]==pre[idx]) k=l;
+//         idx++;
+//         n->left = helper(pre,in,i,k-1);
+//         n->right = helper(pre,in,k+1,j);
+//         return n;
+//     }
+    
+    int idx = 0;
+    TreeNode* bstFromPreorder2(vector<int>& preorder, int p_val = INT_MAX) {
+        if (idx >= preorder.size() || preorder[idx] > p_val)
+            return nullptr;
+        auto n = new TreeNode(preorder[idx++]);
+        n->left = bstFromPreorder2(preorder, n->val);
+        n->right = bstFromPreorder2(preorder, p_val);
         return n;
     }
     
     TreeNode* bstFromPreorder(vector<int>& preorder) {
-        int n = preorder.size();
-        vector<int> inorder;
-        for(int i=0; i<n; i++) inorder.push_back(preorder[i]);
-        sort(inorder.begin(),inorder.end());
-        return helper(preorder,inorder,0,n-1);
+        // int n = preorder.size();
+        // vector<int> inorder;
+        // for(int i=0; i<n; i++) inorder.push_back(preorder[i]);
+        // sort(inorder.begin(),inorder.end());
+        // return helper(preorder,inorder,0,n-1);
+        return bstFromPreorder2(preorder);
     }
 };
