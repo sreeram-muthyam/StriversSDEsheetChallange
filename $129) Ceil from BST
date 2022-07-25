@@ -1,0 +1,47 @@
+/************************************************************
+
+    Following is the TreeNode class structure:
+
+    class BinaryTreeNode {
+    public:
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+        
+        BinaryTreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+        
+        ~BinaryTreeNode() {
+            if (left) {
+              delete left;
+            }
+            if (right) {
+              delete right;
+            }
+        }
+    };
+
+************************************************************/
+
+int res;
+
+void helper(BinaryTreeNode<int>* root, int k)
+{
+    if(root==NULL) return;
+    if(root->data>=k)
+    {
+        res = root->data;
+        helper(root->left,k);
+    }
+    else helper(root->right,k);
+}
+
+int findCeil(BinaryTreeNode<int> *node, int x){
+    // Write your code here.
+    res=-1;
+    helper(node,x);
+    return res;
+}
