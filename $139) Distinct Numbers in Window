@@ -1,0 +1,15 @@
+vector<int> Solution::dNums(vector<int> &A, int B) {
+    int n = A.size();
+    vector<int> res;
+    unordered_map<int,int> um;
+    for(int i=0; i<B && i<n; i++)   um[A[i]]++;
+    res.push_back(um.size());
+    for(int i=B; i<n; i++)
+    {
+        um[A[i]]++;
+        um[A[i-B]]--;
+        if(um[A[i-B]]==0) um.erase(A[i-B]);
+        res.push_back(um.size());
+    }
+    return res;
+}
