@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool canFinish(int n, vector<vector<int>>& prq) 
+    {
+        vector<int> arr[n];
+        vector<bool> vis(n,false);
+        vector<bool> recst(n,false);
+        for(auto e:prq)
+        {
+            arr[e[1]].push_back(e[0]);
+        }
+        for(int i=0; i<n; i++)
+        {
+            if(!vis[i] && helper(arr,i,vis,recst))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    bool helper(vector<int> arr[],int curr,vector<bool> &vis,vector<bool>                       &recst)
+    {
+            vis[curr]=true;
+            recst[curr]=true;
+            for(int i=0; i<arr[curr].size(); i++)
+            {
+                int nxt = arr[curr][i];
+                if(!vis[nxt] && helper(arr,nxt,vis,recst))
+                {
+                    return true;
+                }
+                else if(recst[nxt])
+                {
+                    return true;
+                }
+            }
+        recst[curr]=false;
+        return false;        
+    }
+    
+};
