@@ -1,0 +1,85 @@
+class Solution {
+public:
+    
+    vector<int> cycle;
+    bool found = false;
+    int num;
+    
+    void dfs(vector<vector<int>> &adj, int i, int p, vector<int> &vis)
+    {
+        if(found) return;
+        vis[i]=1;
+        cycle.push_back(i);
+        for(int j=0; j<adj[i].size(); j++)
+        {
+            if(found) return;
+            int nbr = adj[i][j];
+            // cout<<"=================="<<endl;
+            // cout<<i+1<<" "<<nbr+1<<" "<<p+1<<endl;
+            // cout<<"=================="<<endl;
+            if(vis[nbr]==1)
+            {
+                if(nbr!=p)
+                {
+                    num = nbr;
+                    found = true;
+                    return;
+                }
+            }
+            else dfs(adj,nbr,i,vis);
+        }
+        if(found) return;
+        cycle.pop_back();
+    }
+    
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) 
+    {
+        vector<int> res;
+        int n = edges.size();
+        vector<vector<int>> adj(n);
+        map<pair<int,int>,int> mp;
+        for(int i=0; i<n; i++)
+        {
+            int u = edges[i][0]-1;
+            int v = edges[i][1]-1;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+            mp[{u,v}]=i;
+        }
+        vector<int> vis(n,0);
+        dfs(adj,0,-1,vis);
+        // for(int i=0; i<cycle.size(); i++)
+        // {
+        //     cout<<cycle[i]<<" ";
+        // }
+        // cout<<endl;
+        // cout<<"nbr is : "<<num<<endl;
+        reverse(cycle.begin(),cycle.end());
+        while(cycle.size()>0 && cycle.back()!=num) cycle.pop_back();
+        // for(int i=0; i<cycle.size(); i++)
+        // {
+        //     cout<<cycle[i]+1<<" ";
+        // }
+        // cout<<endl;
+        int score = -1;
+        for(int i=0; i<cycle.size(); i++)
+        {
+            int u = cycle[i];
+            int v = cycle[(i+1)%(cycle.size())];
+            if(mp.find({u,v})==mp.end())
+            {
+                int t = u;
+                u = v;
+                v = t;
+            }
+            if(mp[{u,v}]>score)
+            {
+                score = mp[{u,v}];
+                res.clear();
+                res.push_back(u+1);
+                res.push_back(v+1);
+            }
+        }
+        return res;
+    }
+};
