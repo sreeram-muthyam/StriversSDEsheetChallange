@@ -1,0 +1,38 @@
+ vector<int> indegree(V,0);
+	   for(int i=0; i<V; i++)
+	   {
+	       for(int j=0; j<adj[i].size(); j++)
+	       {
+	           int v = adj[i][j];
+	           indegree[v]++;
+	       }
+	   }
+	   queue<int> q;
+	   for(int i=0; i<V; i++)
+	   {
+	       if(indegree[i]==0)
+	       {
+	           q.push(i);
+	       }
+	   }
+	   
+	   while(!q.empty())
+	   {
+	       int n = q.size();
+	       for(int i=0; i<n; i++)
+	       {
+	           int curr = q.front();
+	           q.pop();
+	           res.push_back(curr);
+	           for(int j=0; j<adj[curr].size(); j++)
+	           {
+	               indegree[adj[curr][j]]--;
+	               if(indegree[adj[curr][j]]==0)
+	               {
+	                   q.push(adj[curr][j]);
+	               }
+	           }
+	       }
+	   }
+	   
+	    return res;
