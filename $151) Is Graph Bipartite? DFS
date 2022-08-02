@@ -1,0 +1,34 @@
+class Solution {
+public:
+    
+    bool helper(vector<vector<int>> &adj, int i, vector<int> &vis, vector<int> &color,int c)
+    {
+        vis[i]=1;
+        color[i]=c;
+        for(int j=0; j<adj[i].size(); j++)
+        {
+            int nbr = adj[i][j];
+            if(vis[nbr]==1)
+            {
+                if(color[nbr]==c) return false;
+                
+            }
+            else if(!helper(adj,nbr,vis,color,1-c)) return false;
+        }
+        return true;
+    }
+    
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<int> vis(n,0);
+        vector<int> color(n,-1);
+        for(int i=0; i<n; i++)
+        {
+            if(vis[i]==0)
+            {
+                if(!helper(graph,i,vis,color,0)) return false;
+            }
+        }
+        return true;
+    }
+};
