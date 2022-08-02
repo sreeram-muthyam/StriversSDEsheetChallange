@@ -83,3 +83,59 @@ public:
         return res;
     }
 };
+
+
+// MORE OPTIMIZED
+
+
+class Solution {
+private:
+    vector<int> par;
+    vector<int> rank;
+    int findPar(int a)
+    {
+        if(a == par[a])
+            return a;
+        return par[a] = findPar(par[a]);
+    }
+    bool unionSet(int a,int b)
+    {
+        a = findPar(a);
+        b = findPar(b);
+        if(a == b)
+            return false;
+        if(rank[a] < rank[b])
+        {
+            par[a] = b;
+        }
+        else if(rank[a] > rank[b])
+        {
+            par[b] = a;
+        }
+        else
+        {
+            par[b] = a;
+            rank[a]++;
+        }
+        return true;
+    }
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& E) {
+        int n = E.size();
+        par.resize(n);
+        rank.resize(n);
+        for(int i=0;i<n;i++)
+        {
+            par[i] = i;
+            rank[i] = 0;
+        }
+        for(int i=0;i<n;i++)
+        {
+            int a = E[i].front()-1;
+            int b = E[i].back()-1;
+            if(!unionSet(a,b))
+               return {a+1,b+1}; 
+        }
+        return {};
+    }
+};
