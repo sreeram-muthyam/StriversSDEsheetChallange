@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<string> maxNumOfSubstrings(string s) {
+    int n = s.size();
+    vector<int> first(26, n);
+    vector<int> last(26, -1);
+    //get the first and last occurance for each character of s
+    for(int i = 0; i < n; i++) {
+        int idx = s[i] - 'a';
+        first[idx] = min(first[idx], i);
+        last[idx] = max(last[idx], i);
+    }
+    
+    //update boundary to get valid substring
+    //i.e. acabbbc, for 'a', first and last occurance is [0, 2], but "aca" is not a valid substring since we didn't include all 'c', 
+	//so we iterate the substring of [first, last],  update left and right boundary 
+    for(int i = 0; i < 26; i++) {  // here loop for 26 lower case character
+        int l = first[i];
+        int r = last[i];
+        for(int j = l + 1; j < r; j++) { // here loop the substring of s in [last, first] interval
+            int idx = s[j] - 'a';
+            l = min(l, first[idx]); 
+            r = max(r, last[idx]);
+        }
+        first[i] = l;
+        last[i] = r;
+    }
+
+  
+    vector<vector<int> > subs;
+    for(int i = 0; i < n; i++) {
+        int idx = s[i] - 'a';
+        if(first[idx] == i) { // if first occurance is the current index, it is possible candidate 
+            int r = last[idx];
+            if(!subs.empty() && subs.back()[1] > r) {
+                subs.pop_back(); // we found a inner interval, i.e. aea [0, 2], 'e' [1,1], is a shorter inner interval, it's better to take the shorter one so that we can get more
+            }
+            subs.push_back({i, r});
+        }
+    }
+    // get all valid substrings
+    vector<string> res;
+    for(int i = 0; i < subs.size(); i++) {
+        int l = subs[i][0];
+        int r = subs[i][1];
+        res.push_back(s.substr(l, r - l +1));
+    }
+    return res;
+    }
+};
