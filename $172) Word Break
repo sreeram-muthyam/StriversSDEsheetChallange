@@ -1,0 +1,65 @@
+// { Driver Code Starts
+//Initial template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+//User function template for C++
+
+// A : given string to search
+// B : vector of available strings
+
+class Solution
+{
+    public:
+    
+    unordered_set<string> us;
+    
+    bool helper(string &str, unordered_map<string,bool> &dp)
+    {
+        if(str=="") return dp[str] = true;
+        if(dp.find(str)!=dp.end()) return dp[str];
+        for(int len=1; len<=str.size(); len++)
+        {
+            string s = str.substr(0,len);
+            if(us.find(s)!=us.end())
+            {
+                string st = str.substr(len);
+                bool ans = helper(st,dp);
+                if(ans) return dp[str] = true;
+            }
+        }
+        return dp[str] = false;
+    }
+    
+    int wordBreak(string A, vector<string> &B) {
+        //code here
+        for(int i=0; i<B.size(); i++) us.insert(B[i]);
+        unordered_map<string,bool> dp;
+        return helper(A,dp);
+    }
+};
+
+// { Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+        cin>>n;
+        vector<string> dict;
+        for(int i=0;i<n;i++){
+            string S;
+            cin>>S;
+            dict.push_back(S);
+        }
+        string line;
+        cin>>line;
+        Solution ob;
+        cout<<ob.wordBreak(line, dict)<<"\n";
+    }
+}
+  // } Driver Code Ends
