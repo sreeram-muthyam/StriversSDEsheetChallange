@@ -1,0 +1,19 @@
+class Solution {
+public:
+    
+    int helper(int i, int j, int m, int n, vector<vector<int>> &arr, vector<vector<int>> &dp)
+    {
+        if(i==m-1 && j==n-1) return arr[i][j];
+        if(i==m || j==n) return 1e5;
+        if(dp[i][j]!=-1) return dp[i][j];
+        return dp[i][j] = arr[i][j]+min(helper(i+1,j,m,n,arr,dp),helper(i,j+1,m,n,arr,dp));
+    }
+    
+    int minPathSum(vector<vector<int>>& grid) 
+    {
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<vector<int>> dp(m,vector<int>(n,-1));
+        return helper(0,0,m,n,grid,dp);
+    }
+};
