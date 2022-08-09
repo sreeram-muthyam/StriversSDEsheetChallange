@@ -1,0 +1,29 @@
+class Solution {
+public:
+    
+    int helper(vector<int> &arr, int i, int n, int k, vector<vector<int>> &dp)
+    {
+        if(k==0) return 0;
+        if(i==n) return INT_MAX;
+        if(dp[i][k]!=-1) return dp[i][k];
+        if(arr[i]>k)
+        {
+            return dp[i][k] = helper(arr,i+1,n,k,dp);
+        }
+        else
+        {
+            int ans1 = helper(arr,i,n,k-arr[i],dp);
+            if(ans1!=INT_MAX) return dp[i][k] = min(helper(arr,i+1,n,k,dp),1+ans1);
+            else return dp[i][k] = helper(arr,i+1,n,k,dp);
+        }
+    }
+    
+    int coinChange(vector<int>& coins, int amount) 
+    {
+        int n = coins.size();
+        vector<vector<int>> dp(n,vector<int>(amount+1,-1));
+        int ans = helper(coins,0,n,amount,dp);
+        if(ans!=INT_MAX) return ans;
+        return -1;
+    }
+};
