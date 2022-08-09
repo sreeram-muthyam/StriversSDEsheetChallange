@@ -1,0 +1,79 @@
+class Solution {
+public:
+    
+    int dp[101][101][600];
+    
+    int findMaxForm(vector<string>& strs, int m, int n) 
+    {
+        int size = strs.size();
+        // map<string,int> dp;
+        memset(dp,-1,sizeof(dp));
+        return helper(strs,size,m,n,0);
+    }
+    
+    int helper(vector<string> &strs, int s, int m, int n, int i)
+    {
+        if(i>=s || (m+n)<=0) return 0;
+        // string str = to_string(m)+"$"+to_string(n)+"$"+to_string(i);
+        if(dp[m][n][i]!=-1) return dp[m][n][i];
+        int ifinclude = 0;
+        int ifexclude = 0;
+        int zc = cnt(strs[i]);
+        int oc = strs[i].size()-zc;
+        if(zc<=m && oc<=n)
+        {
+            ifinclude = 1+helper(strs,s,m-zc,n-oc,i+1);
+        }
+        ifexclude = helper(strs,s,m,n,i+1);
+        return dp[m][n][i] = max(ifinclude,ifexclude);
+    }
+    
+    int cnt(string &str)
+    {
+        int z=0;
+        for(auto ch : str)
+            if(ch=='0') z++;
+        return z;
+    }
+};
+// class Solution {
+// public:
+//     int dp[101][101][600];
+//     //function for counting number of zeroes
+//     int Countzero(string &s){
+//         int cnt=0;
+//         for(auto& a:s){
+//             if(a=='0'){
+//                 cnt++;
+//             }
+//         }
+//         return cnt;
+//     }
+//     int helper(vector<string>& str, int m, int n,int ind){
+//         if(ind>=str.size()||(m==0 &&n==0)){
+//             return 0;
+//         }
+//         if(dp[m][n][ind]!=-1){
+//            // return dp[m][n][ind];
+//         }
+//         int cntzero=Countzero(str[ind]);
+//         //numbers of one would be length of (currstring -numberofzeroes);
+//         int cntones=str[ind].length()-cntzero;
+//         //for each string we have two choices either we pick it or skip it
+//         //if we skip it we would recursively call for rest of the array without affecting 
+//         //number of zeroes(m) && ones(n)
+//         int skip=helper(str,m,n,ind+1);
+//         int take=0;
+//         //if we want to take it then just check whether left number of zeroes and ones are enough
+//         //or not if yes then call recusively by reducing number of zeroes and ones
+//         if(m>=cntzero&&n>=cntones){
+//             take=1+helper(str,m-cntzero,n-cntones,ind+1);
+//         }
+//         //finally memoized step
+//         return dp[m][n][ind]=max(take,skip);
+//     }
+//     int findMaxForm(vector<string>& strs, int m, int n) {
+//         memset(dp,-1,sizeof(dp));
+//         return helper(strs,m,n,0);
+//     }
+// };
