@@ -1,116 +1,84 @@
-/*
-    Time Complexity : O(N*(log(N)) + M*(log(M)))
-    Space Complexity : O(N + M)
 
-    Where 'N' is the size of ‘ARR’, and ‘M’  is the number of queries.
-*/
-
-#include <algorithm>
-
-struct TrieNode {
-    TrieNode *children[2];
+typedef long long int ll;
+struct Node{
+    int index;
+    Node *links[2];
+    Node(){
+        index = -1;
+        links[0] = links[1] = NULL;
+    }
+    bool ispresent(int a){
+        return links[a]!=NULL;
+    }
+    void put(int a, Node *node){
+        links[a] = node;
+    }
+    Node *get_node(int a){
+        return links[a];
+    }
+};
+class Trie{
+    public:
+    Node *root;
+    Trie(){
+        root = new Node();
+    }
+    void insert(int num,int index){
+        Node *node = root;
+        for(int i =31;i>=0;i--){
+            int a = (num>>i)&1;
+            if(!node->ispresent(a)){
+                node->put(a,new Node());
+            }
+            node = node->get_node(a);
+        }
+        node->index = index;      
+    }
+    int find_max(int num){
+        Node *node = root;
+        for(int i =31;i>=0;i--){
+            int a = (num>>i)&1;
+            if(node->ispresent(1-a)){
+                node= node->get_node(1-a);
+            }
+            else{
+                node = node->get_node(a);
+            }
+        }
+        return node->index;
+    }
 };
 
-void insert(TrieNode *root, int num) {
-    TrieNode *ptr = root;
-
-    for(int i = 30; i >= 0; i--) {
-        if(num & (1 << i)) {
-            if(ptr->children[1] == NULL) {
-                ptr->children[1] = new TrieNode();
-            }
-            ptr = ptr->children[1];
-        }
-        else {
-            if(ptr->children[0] == NULL) {
-                ptr->children[0] = new TrieNode();
-            }
-            ptr = ptr->children[0];
-        }
+class Solution {
+public:
+    static bool compr(vector<int> &a, vector<int> &b){
+        return a[1]<b[1];
     }
-}
-
-vector<int> maxXorQueries(vector<int>& arr, vector<vector<int>>& queries)
-{
-
-    //  Size of array and number of queries.
-    int n = arr.size();
-    int m = queries.size();
-
-    vector<int> result(m, -1), order(m);
-
-    //  Sort ‘arr’ in non-decreasing order.
-    sort(arr.begin(), arr.end());
-
-    for(int i = 0; i < m; i++)
-    {
-        order[i] = i;
-    }
-
-    //  Order in which queries will be processed.
-    sort(order.begin(), order.end(), [&](int i, int j) -> bool {
-        return queries[i][1] < queries[j][1];
-    });
-
-    TrieNode *root = new TrieNode();
-    int p = 0;
-
-    //  Finding answer of each query.
-    for(int i = 0; i < m; i++)
-    {
-
-        //  Index of query process in current iteration.
-        int id = order[i];
-
-        //  Insert integers of 'arr' smaller or equal to queries[id][1] in trie.
-        while(p < n && arr[p] <= queries[id][1])
-        {
-            insert(root, arr[p]);
-            p++;
+    vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
+        Trie trie;
+        sort(nums.begin(),nums.end());
+        int n =queries.size();
+        vector<int> ans(n);
+        for(int i =0;i<n;i++){
+            queries[i].push_back(i);
+            //cout<<queries[i][0]<<" "<<queries[i][1]<<" "<<queries[i][2]<<"\n";
         }
-
-        //  If trie is empty then answer to this query is -1.
-        if(root->children[0] == NULL && root->children[1] == NULL)
-        {
-            continue;
-        }
-
-        TrieNode *ptr = root;
-        int ans = 0;
-
-        for(int j = 30; j >= 0; j--)
-        {
-
-            // If jth bit is set in query[id][0].
-            if(queries[id][0] & (1 << j))
-            {
-                if(ptr->children[0] != NULL)
-                {
-                    ptr = ptr->children[0];
-                    ans = ans | (1 << j);
-                }
-                else
-                {
-                    ptr = ptr->children[1];
-                }
-
+        sort(queries.begin(),queries.end(),compr);
+        int index = 0;
+        for(int i =0;i<n;i++){
+            while(nums[index]<=queries[i][1]){
+                if(index>=nums.size()) break;
+                trie.insert(nums[index],index);
+                index++;
+                
             }
-            else
-            {
-
-                // If jth bit is not set in query[id][0].
-                if(ptr->children[1] != NULL) {
-                    ptr = ptr->children[1];
-                    ans = ans | (1 << j);
-                } else {
-                    ptr = ptr -> children[0];
-                }
-            }
+            if(index==0) ans[queries[i][2]] = -1;
+            else{
+                
+            int in = trie.find_max(queries[i][0]);
+            cout<<in<<"\n";
+            ans[queries[i][2]] = ll(queries[i][0]^nums[in]);}
         }
-
-        result[id] = ans;
-
+        return ans;
     }
-
-    return result;
-}
+};
