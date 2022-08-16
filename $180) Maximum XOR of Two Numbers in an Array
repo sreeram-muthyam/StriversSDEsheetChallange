@@ -1,0 +1,75 @@
+class TrieNode
+{
+    public :
+    TrieNode* children[2];
+    
+    TrieNode()
+    {
+        children[0]=children[1]=NULL;
+    }
+};
+
+void insert(TrieNode* root, int data)
+{
+    for(int i=31; i>=0; i--)
+    {
+        int bit = (data>>i)&1;
+        if(root->children[bit]==NULL)
+            root->children[bit] = new TrieNode();
+        root = root->children[bit];
+    }
+}
+
+class Solution {
+    
+public:
+    int findMaximumXOR(vector<int>& nums) {
+        // int res=0, mask=0;
+        // for(int i=31; i>=0; i--)
+        // {
+        //     mask = mask | (1<<i);
+        //     unordered_set<int> s;
+        //     for(auto e:nums)
+        //     {
+        //         s.insert(e&mask);
+        //     }
+        //     int tmp = res|(1<<i);
+        //     for(auto e:s)
+        //     {
+        //         if(s.find(e^tmp)!=s.end())
+        //         {
+        //             res=tmp;
+        //             break;
+        //         }
+        //     }
+        // }
+        // return res;
+        TrieNode* root = new TrieNode();
+        for(int i=0; i<nums.size(); i++)
+        {
+            insert(root,nums[i]);
+        }
+        int res = 0;
+        for(int i=0; i<nums.size(); i++)
+        {
+            int no = nums[i];
+            TrieNode* curr = root;
+            int ans = 0;
+            for(int j=31; j>=0; j--)
+            {
+                int bit = ((no&(1<<j))) ? 0 : 1;
+                if(curr->children[bit]!=NULL)
+                {
+                    curr = curr->children[bit];
+                    ans = ans | (1<<j);
+                }
+                else
+                {
+                    curr = curr->children[!bit];
+                }
+            }
+            res = max(res,ans);
+        }
+        return res;
+    }
+};
